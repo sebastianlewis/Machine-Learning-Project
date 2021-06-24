@@ -85,16 +85,18 @@ ctrloob = trainControl( method = "oob") #out-of-bag (oob) error estimation
 system.time(Mdl <- train(classe~.,data=train, method='ranger',preProcess = c("center", "scale"),
               trControl = ctrloob)) #$ranger2
 Mdl
+#in sample error
 getMetric(Mdl)
 ```
 
 ### Estimate out of sample error
-I estimated the out of sample error by testing the model on the `verify` data set that was not used to train the model. The result is given in the confusion matrix below: 
+I estimated the out of sample error by testing the model on the `verify` data set that was not used to train the model. The result is given in the confusion matrix below, with `Accuracy` representing the out of sample error. 
 
 ```{r}
 pred <- predict(Mdl,verify)
 confusionMatrix(factor(verify$classe),pred)$table
+#out of sample error
 confusionMatrix(factor(verify$classe),pred)$overall['Accuracy']
 ```
-The out of sample error of 0.9941371 is slightly lower than the in sample error of 0.9966877. This is to be expected as the model tends to the tune itself to the training set and overfit the train data. However the difference between the in and out of error samples errors is very small at around 0.3 percentage points.  
+The out of sample error is slightly lower than the in sample error. This is to be expected as the model tends to the tune itself to the training set and overfit to the training data.  
 
